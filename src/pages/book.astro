@@ -1,0 +1,21 @@
+---
+import { BOOKS, getBookInfoById } from "../api/book/util";
+import Layout from "../layouts/Layout.astro";
+import BookCard from "../components/BookCard.astro";
+import Intro from "../components/intro.mdx";
+const bookJson = await Promise.all(BOOKS.map(getBookInfoById));
+---
+
+<Layout
+    containerClassName="bg-[#f9f9fa] dark:bg-background"
+    showDivider={false}
+>
+    <div class="container max-w-4xl mx-auto">
+        <div class="rounded-sm bg-background px-4 overflow-auto">
+            <Intro />
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-4">
+            {bookJson?.map((book) => <BookCard data={book} key={book.id} />)}
+        </div>
+    </div>
+</Layout>

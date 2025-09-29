@@ -1,0 +1,58 @@
+---
+import ActiveLink from "./ActiveLink.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import SignIn from "./SignIn.astro";
+
+interface NavLinkItem {
+    id: string;
+    path: string;
+    title: string;
+}
+
+const navLinks: NavLinkItem[] = [
+    {
+        id: "header-home",
+        path: "/",
+        title: "主页",
+    },
+    {
+        id: "header-post",
+        path: "/posts", // Changed from /post to /posts based on previous context
+        title: "文章",
+    },
+    {
+        id: "header-book",
+        path: "/book",
+        title: "书籍",
+    },
+    {
+        id: "header-thoughts",
+        path: "/thoughts",
+        title: "碎碎念",
+    },
+    {
+        id: "header-about",
+        path: "/about",
+        title: "关于本站",
+    },
+];
+---
+
+<header class="flex py-4 z-30 hide-scrollbar sticky w-full font-bold text-lg">
+    <div class="flex-1 flex justify-start items-start space-x-4">
+        {
+            navLinks.map((navLink) => (
+                <ActiveLink
+                    class="flex flex-row items-center text-foreground"
+                    href={navLink.path}
+                >
+                    {navLink.title}
+                </ActiveLink>
+            ))
+        }
+    </div>
+    <div class="flex gap-2 items-center">
+        <ThemeToggle />
+        <SignIn />
+    </div>
+</header>

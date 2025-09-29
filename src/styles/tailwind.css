@@ -1,0 +1,91 @@
+@import "./markdown.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --background: 255, 255, 255;
+    --foreground: 0, 0, 0;
+    --link: theme("colors.blue.500");
+}
+
+[data-joy-color-scheme="dark"] {
+    --background: 0, 0, 0;
+    --foreground: 255, 255, 255;
+    --link: theme("colors.white");
+}
+
+a {
+    color: var(--link);
+}
+
+article a::after {
+    content: attr(data-count number, 0) ". ";
+}
+
+h1,
+h2,
+h3,
+h4 {
+    @apply font-bold my-2;
+}
+
+h1 {
+    @apply text-3xl;
+}
+
+h2 {
+    @apply text-2xl;
+}
+
+h3 {
+    @apply text-xl;
+}
+
+h4 {
+    @apply text-sm;
+}
+
+p,
+ol,
+ul,
+li,
+pre,
+blockquote,
+code {
+    @apply my-2;
+}
+
+ol {
+    @apply px-4;
+}
+
+ol > li {
+    @apply list-decimal;
+}
+
+pre {
+    @apply overflow-auto;
+}
+
+code > span {
+    @apply mx-4;
+}
+
+html,
+body {
+    font-family:
+        Inter var,
+        ui-sans-serif,
+        system-ui,
+        sans-serif,
+        Apple Color Emoji,
+        Segoe UI Emoji,
+        Segoe UI Symbol,
+        Noto Color Emoji;
+}
+
+body::-webkit-scrollbar {
+    /* background: aquamarine; */
+    display: none;
+}

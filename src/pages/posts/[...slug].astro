@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection, render } from "astro:content";
+import { idToSlug } from "../../utils/idToSlug";
+import Layout from "../../layouts/Layout.astro";
+import { format } from "date-fns";
+
+export const getStaticPaths = async () => {
+    const allPosts: CollectionEntry<"posts">[] = await getCollection("posts");
+    return allPosts.map((post) => ({
+        params: { slug: idToSlug(post.id) },
+    }));
+};
+
+const { slug } = Astro.params;
+const fullSlug = Array.isArray(slug) ? slug.join("/") : slug!;
+const allPosts: CollectionEntry<"posts">[] = await getCollection("posts");
+const entry = allPosts.find((p) => idToSlug(p.id) === fullSlug);
+if (!entry) {
+    throw new Error(`Post not found: ${fullSlug}`);
+}
+const { Content } = await render(entry);
+---
+
+<Layout>
+    <article>
+        <h1>{entry.data?.title ?? idToSlug(entry.id)}</h1>
+        {
+            entry.data?.date && (
+                <p>
+                    <small class="text-sm text-gray-500">
+                        {format(entry.data.date, "LLLL d, yyyy")}
+                    </small>
+                </p>
+            )
+        }
+        <Content />
+    </article>
+</Layout>

@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"a"> {
+    href: string;
+}
+
+const { href, class: className, ...props } = Astro.props;
+
+const { pathname } = Astro.url;
+const isActive = href === pathname;
+
+const computedClassName = [className, isActive ? "drop-shadow" : ""]
+    .join(" ")
+    .trim();
+---
+
+<a href={href} class={computedClassName} {...props}>
+    <slot />
+</a>

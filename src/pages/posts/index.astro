@@ -1,0 +1,45 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import { format } from "date-fns";
+import Layout from "../../layouts/Layout.astro";
+
+import { idToSlug } from "../../utils/idToSlug";
+
+const posts = await getCollection("posts");
+const sortedPosts: CollectionEntry<"posts">[] = posts
+    .slice()
+    .sort((a: CollectionEntry<"posts">, b: CollectionEntry<"posts">) =>
+        idToSlug(a.id).localeCompare(idToSlug(b.id)),
+    );
+---
+
+<Layout>
+    <div
+        class="group relative flex flex-col justify-start items-start w-full gap-4"
+    >
+        {
+            sortedPosts.map((post) => (
+                <div>
+                    <a
+                        href={`/posts/${idToSlug(post.id)}/`}
+                        class="block text-xl font-semibold text-foreground hover:text-link"
+                    >
+                        {post.data?.title ?? idToSlug(post.id)}
+                    </a>
+                    <div class="flex items-center gap-2">
+                        {post.data?.date && (
+                            <small class="text-sm text-gray-500">
+                                {format(post.data.date, "LLLL d, yyyy")}
+                            </small>
+                        )}
+                        {post.data?.description && (
+                            <div style="opacity: 0.8;">
+                                {post.data.description}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</Layout>

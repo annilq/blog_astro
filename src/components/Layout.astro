@@ -1,0 +1,32 @@
+---
+import Navigation from "./Navigation.astro";
+import { cn } from "../utils/utils";
+import { Divider } from "@mui/joy";
+
+interface Props {
+    containerClassName?: string;
+    headerClass?: string;
+    showDivider?: boolean;
+}
+const containerClass = "container max-w-4xl";
+const {
+    containerClassName = containerClass,
+    headerClass = containerClass,
+    showDivider = true,
+} = Astro.props;
+---
+
+<main class="min-h-screen flex flex-col">
+    <div class={cn("mx-auto px-2 lg:px-2", headerClass)}>
+        <Navigation />
+        {showDivider && <Divider />}
+        <div
+            class={cn(
+                "w-full mx-auto flex-1 flex flex-col pb-8 py-2",
+                containerClassName,
+            )}
+        >
+            <slot />
+        </div>
+    </div>
+</main>

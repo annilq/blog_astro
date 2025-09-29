@@ -1,0 +1,12 @@
+---
+import type { Book } from "../api/book/util";
+import BookInteractiveWrapper from "./BookInteractiveWrapper.tsx";
+
+interface Props {
+  data: Book;
+}
+
+const { data } = Astro.props;
+---
+
+<BookInteractiveWrapper data={data} client:load />
