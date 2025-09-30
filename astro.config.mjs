@@ -3,6 +3,8 @@ import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
+import auth from "auth-astro";
+import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,5 +14,7 @@ export default defineConfig({
     }),
     mdx(),
     react(),
+    auth(),
   ],
+  adapter: vercel(),
 });

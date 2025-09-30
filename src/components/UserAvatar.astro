@@ -1,0 +1,15 @@
+---
+import { getSession } from "auth-astro/server";
+import SignIn from "./SignIn.astro";
+import { cn } from "../utils/utils";
+
+interface Props {
+    className?: string;
+}
+const session = await getSession(Astro.request);
+const { className } = Astro.props;
+---
+
+<div class={cn(`w-8 h-8 overflow-clip rounded-full`, className)}>
+    <SignIn />
+</div>

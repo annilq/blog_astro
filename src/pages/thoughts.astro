@@ -1,0 +1,77 @@
+---
+import { getSession } from "auth-astro/server";
+import { format } from "date-fns";
+import Layout from "../layouts/Layout.astro"; // Adjusted path to Layout
+import ThoughtForm from "../components/ThoughtForm.tsx";
+import ThoughtDelBtn from "../components/ThoughtDelBtn.tsx";
+import JoyCard from "../components/JoyCard.tsx";
+
+// IMPORTANT: These server-side functions (getThoughts, addThought, deleteThought)
+// need to be implemented in a way that Astro can call them from the frontmatter.
+// This typically means they are standard JavaScript/TypeScript functions that
+// perform database operations or call external APIs.
+// You might need to move them from `src/pages/actions.ts` to `src/api/thoughts.ts`
+// or a similar server-side utility file, and ensure they are compatible with Astro's SSR.
+import {
+    getThoughts,
+    addThought,
+    deleteThought,
+} from "../api/thoughts/actions"; // Placeholder path, adjust as needed
+
+// Placeholder for session. Astro does not have a built-in `auth` like Next.js.
+// You will need to implement your own authentication system (e.g., using API routes,
+// a third-party library, or server-side utilities) to get actual user session data.
+// For demonstration, we'll hardcode a session object.
+const session = await getSession(Astro.request);
+
+// Example of Astro redirection. Uncomment and implement your actual auth check.
+// if (!session?.user) {
+//     return Astro.redirect('/login'); // Redirect to your login page if user is not authenticated
+// }
+
+// Data fetching in Astro's frontmatter runs on the server.
+const thoughts = await getThoughts(Astro.request);
+---
+
+<Layout>
+    <div class="container mx-auto">
+        <div class="flex flex-col gap-4">
+            {
+                session?.user && (
+                    <ThoughtForm
+                        addThought={(form) => addThought(form, session)}
+                        client:load
+                    />
+                )
+            }
+
+            {
+                thoughts.map((thought) => (
+                    <JoyCard
+                        variant="soft"
+                        className="flex flex-col"
+                        client:load
+                    >
+                        <div class="whitespace-pre-wrap">{thought.content}</div>
+                        <div class="flex justify-between text-sm text-foreground">
+                            <time datetime={thought.createdAt.toISOString()}>
+                                {format(
+                                    thought.createdAt,
+                                    "yyyy-MM-dd HH:mm:ss",
+                                )}
+                            </time>
+                            {/* ThoughtDelBtn is a React component and needs a client:load directive */}
+                            {session?.user && (
+                                <ThoughtDelBtn
+                                    id={thought.id}
+                                    deleteThought={deleteThought}
+                                    client:load
+                                />
+                            )}
+                        </div>
+                    </JoyCard>
+                ))
+            }
+        </div>
+    </div>
+</Layout>

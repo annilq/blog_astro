@@ -3,19 +3,22 @@
 import React, { useState } from "react";
 import type { Book } from "../api/book/util";
 import BookModal from "./BookModal.tsx";
+import * as Icon from "lucide-react";
 
 interface BookInteractiveWrapperProps {
   data: Book;
 }
 
-export default function BookInteractiveWrapper({ data }: BookInteractiveWrapperProps) {
+export default function BookInteractiveWrapper({
+  data,
+}: BookInteractiveWrapperProps) {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
     <div>
       <div className="relative bg-background dark:bg-gray-800 rounded-2xl p-4 shadow flex gap-4 w-72 aspect-video">
         <a href={data.href} target="_blank" title={data.title}>
-          Link
+          <Icon.Link className="absolute top-2 right-2 w-4 text-gray-600" />
         </a>
         <img
           src={data.url}

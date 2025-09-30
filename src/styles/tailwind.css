@@ -9,7 +9,7 @@
     --link: theme("colors.blue.500");
 }
 
-[data-joy-color-scheme="dark"] {
+[data-theme="dark"] {
     --background: 0, 0, 0;
     --foreground: 255, 255, 255;
     --link: theme("colors.white");

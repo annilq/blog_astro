@@ -1,40 +1,37 @@
 ---
 // SignIn.astro
-// This component provides a static placeholder for sign-in/sign-out.
-// Removed all React-specific hooks and `next-auth/react` dependencies.
-// Replaced @mui/joy components with basic HTML and inline SVGs for icons.
+import { getSession } from "auth-astro/server";
+//
+import { Button, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
+import { LogInIcon, LogOutIcon, UserRound } from "lucide-react";
+const session = await getSession(Astro.request);
 ---
 
-<div class="space-y-1">
-  <!-- Sign In Button (static placeholder) -->
-  <button class="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-    <!-- LogInIcon SVG -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in">
-      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/>
-    </svg>
-    <span>Sign In</span>
-  </button>
-
-  <!--
-    If a user were signed in, a dropdown with a "Sign Out" option would appear here.
-    This is a commented-out placeholder for that future functionality,
-    which would require client-side JavaScript or a full Astro authentication solution.
-  -->
-  <!--
-  <div class="relative hidden">
-    <button class="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round">
-        <circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>
-      </svg>
-    </button>
-    <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-20">
-      <button class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/>
-        </svg>
-        <span>Sign Out</span>
-      </button>
-    </div>
-  </div>
-  -->
-</div>
+{
+    session?.data?.user ? (
+        <Dropdown>
+            <MenuButton variant="plain">
+                <UserRound />
+            </MenuButton>
+            <Menu>
+                <MenuItem id="logout">
+                    <LogOutIcon />
+                </MenuItem>
+            </Menu>
+        </Dropdown>
+    ) : (
+        false
+    )
+}
+{
+    !session?.data?.user ? (
+        <Button id="login" variant="plain">
+            <LogInIcon />
+        </Button>
+    ) : null
+}
+<script>
+    const { signIn, signOut } = await import("auth-astro/client");
+    document.querySelector("#login").onclick = () => signIn("github");
+    document.querySelector("#logout").onclick = () => signOut();
+</script>
