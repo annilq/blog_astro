@@ -2,8 +2,8 @@
 import { getSession } from "auth-astro/server";
 import { format } from "date-fns";
 import Layout from "../layouts/Layout.astro"; // Adjusted path to Layout
-import ThoughtForm from "../components/ThoughtForm.tsx";
-import ThoughtDelBtn from "../components/ThoughtDelBtn.tsx";
+import ThoughtForm from "../components/ThoughtForm.astro";
+import ThoughtDelBtn from "../components/ThoughtDelBtn.astro";
 import JoyCard from "../components/JoyCard.tsx";
 
 // IMPORTANT: These server-side functions (getThoughts, addThought, deleteThought)
@@ -12,11 +12,7 @@ import JoyCard from "../components/JoyCard.tsx";
 // perform database operations or call external APIs.
 // You might need to move them from `src/pages/actions.ts` to `src/api/thoughts.ts`
 // or a similar server-side utility file, and ensure they are compatible with Astro's SSR.
-import {
-    getThoughts,
-    addThought,
-    deleteThought,
-} from "../api/thoughts/actions"; // Placeholder path, adjust as needed
+import { getThoughts } from "../api/thoughts/actions"; // Placeholder path, adjust as needed
 
 // Placeholder for session. Astro does not have a built-in `auth` like Next.js.
 // You will need to implement your own authentication system (e.g., using API routes,
@@ -36,15 +32,8 @@ const thoughts = await getThoughts(Astro.request);
 <Layout>
     <div class="container mx-auto">
         <div class="flex flex-col gap-4">
-            {
-                session?.user && (
-                    <ThoughtForm
-                        addThought={(form) => addThought(form, session)}
-                        client:load
-                    />
-                )
-            }
-
+            {session?.user ? <ThoughtForm client:load /> : null}
+            <ThoughtForm client:load />
             {
                 thoughts.map((thought) => (
                     <JoyCard
@@ -62,11 +51,7 @@ const thoughts = await getThoughts(Astro.request);
                             </time>
                             {/* ThoughtDelBtn is a React component and needs a client:load directive */}
                             {session?.user && (
-                                <ThoughtDelBtn
-                                    id={thought.id}
-                                    deleteThought={deleteThought}
-                                    client:load
-                                />
+                                <ThoughtDelBtn id={thought.id} client:load />
                             )}
                         </div>
                     </JoyCard>

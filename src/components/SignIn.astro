@@ -1,7 +1,6 @@
 ---
 // SignIn.astro
 import { getSession } from "auth-astro/server";
-//
 import { Button, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { LogInIcon, LogOutIcon, UserRound } from "lucide-react";
 const session = await getSession(Astro.request);
@@ -20,16 +19,12 @@ const session = await getSession(Astro.request);
             </Menu>
         </Dropdown>
     ) : (
-        false
-    )
-}
-{
-    !session?.data?.user ? (
         <Button id="login" variant="plain">
             <LogInIcon />
         </Button>
-    ) : null
+    )
 }
+
 <script>
     const { signIn, signOut } = await import("auth-astro/client");
     document.querySelectorAll("button").forEach((button) => {

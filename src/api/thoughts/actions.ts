@@ -1,6 +1,8 @@
 import prisma from "../../lib/prisma";
+import { getSession } from "auth-astro/server";
 
-export async function getThoughts(session: Request) {
+export async function getThoughts(request: Request) {
+  const session = await getSession(request);
   return await prisma.thought.findMany({
     where: {
       name: session?.user?.name!,
@@ -11,8 +13,9 @@ export async function getThoughts(session: Request) {
   });
 }
 
-export async function addThought(formData: FormData, session: Request) {
+export async function addThought(formData: FormData, request: Request) {
   const content = formData.get("content") as string;
+  const session = await getSession(request);
 
   if (!content || content.trim() === "") {
     return { error: "Thought content cannot be empty" };
@@ -32,7 +35,7 @@ export async function addThought(formData: FormData, session: Request) {
   }
 }
 
-export async function deleteThought(id: string) {
+export async function deleteThought(id: string, request: Request) {
   await prisma.thought.delete({
     where: { id },
   });
@@ -40,7 +43,7 @@ export async function deleteThought(id: string) {
   return { success: true };
 }
 
-export async function clearAllThoughts() {
+export async function clearAllThoughts(request: Request) {
   await prisma.thought.deleteMany({});
 
   return { success: true };

@@ -1,0 +1,21 @@
+---
+import { addThought } from "../api/thoughts/actions";
+---
+
+<form
+    method="POST"
+    action={(formData) => addThought(formData, Astro.request)}
+    class="flex flex-col gap-4"
+>
+    <textarea
+        placeholder="碎碎念..."
+        name="content"
+        rows={3}
+        class="resize-none border border-gray-300 rounded p-1"></textarea>
+    <button
+        type="submit"
+        class="self-end rounded bg-blue-500 text-white px-4 py-2"
+    >
+        确定
+    </button>
+</form>
