@@ -33,7 +33,6 @@ const thoughts = await getThoughts(Astro.request);
     <div class="container mx-auto">
         <div class="flex flex-col gap-4">
             {session?.user ? <ThoughtForm client:load /> : null}
-            <ThoughtForm client:load />
             {
                 thoughts.map((thought) => (
                     <JoyCard
