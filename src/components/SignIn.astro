@@ -4,10 +4,11 @@ import { getSession } from "auth-astro/server";
 import { Button, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { LogInIcon, LogOutIcon, UserRound } from "lucide-react";
 const session = await getSession(Astro.request);
+export const prerender = false
 ---
 
 {
-    session?.data?.user ? (
+    session?.user ? (
         <Dropdown>
             <MenuButton variant="plain">
                 <UserRound />
@@ -28,10 +29,10 @@ const session = await getSession(Astro.request);
 <script>
     const { signIn, signOut } = await import("auth-astro/client");
     document.querySelectorAll("button").forEach((button) => {
-        button.addEventListener("click", (event) => {
-            if (event.currentTarget.id === "login") {
+        button.addEventListener("click", (event: Event) => {
+            if (event?.currentTarget?.id === "login") {
                 signIn("github");
-            } else if (event.currentTarget.id === "logout") {
+            } else if (event?.currentTarget?.id === "logout") {
                 signOut();
             }
         });

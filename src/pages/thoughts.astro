@@ -27,12 +27,13 @@ const session = await getSession(Astro.request);
 
 // Data fetching in Astro's frontmatter runs on the server.
 const thoughts = await getThoughts(Astro.request);
+export const prerender = false
 ---
 
 <Layout>
     <div class="container mx-auto">
         <div class="flex flex-col gap-4">
-            {session?.user ? <ThoughtForm client:load /> : null}
+            <!-- {session?.user ? <ThoughtForm client:load /> : null} -->
             {
                 thoughts.map((thought) => (
                     <JoyCard
@@ -49,9 +50,9 @@ const thoughts = await getThoughts(Astro.request);
                                 )}
                             </time>
                             {/* ThoughtDelBtn is a React component and needs a client:load directive */}
-                            {session?.user && (
+                            {/* {session?.user && (
                                 <ThoughtDelBtn id={thought.id} client:load />
-                            )}
+                            )} */}
                         </div>
                     </JoyCard>
                 ))
